@@ -14,6 +14,7 @@
 		515267F21CB065B300B0F384 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515267F01CB065B300B0F384 /* LaunchScreen.storyboard */; };
 		515267FD1CB065B300B0F384 /* PoppyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515267FC1CB065B300B0F384 /* PoppyTests.swift */; };
 		515268081CB065B300B0F384 /* PoppyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515268071CB065B300B0F384 /* PoppyUITests.swift */; };
+		515268161CB0675000B0F384 /* PoppyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515268151CB0675000B0F384 /* PoppyButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		515268031CB065B300B0F384 /* PoppyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PoppyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		515268071CB065B300B0F384 /* PoppyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoppyUITests.swift; sourceTree = "<group>"; };
 		515268091CB065B300B0F384 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		515268151CB0675000B0F384 /* PoppyButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoppyButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				515267E71CB065B300B0F384 /* AppDelegate.swift */,
 				515267E91CB065B300B0F384 /* ViewController.swift */,
+				515268151CB0675000B0F384 /* PoppyButton.swift */,
 				515267EB1CB065B300B0F384 /* Main.storyboard */,
 				515267EE1CB065B300B0F384 /* Assets.xcassets */,
 				515267F01CB065B300B0F384 /* LaunchScreen.storyboard */,
@@ -258,6 +261,7 @@
 			files = (
 				515267EA1CB065B300B0F384 /* ViewController.swift in Sources */,
 				515267E81CB065B300B0F384 /* AppDelegate.swift in Sources */,
+				515268161CB0675000B0F384 /* PoppyButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

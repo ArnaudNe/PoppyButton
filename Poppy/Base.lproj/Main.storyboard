@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F18b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Poppy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,8 +16,63 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFV-fz-cim" customClass="PoppyButton" customModule="Poppy" customModuleProvider="target">
+                                <rect key="frame" x="262" y="285" width="76" height="30"/>
+                                <state key="normal" title="Long Press">
+                                    <color key="titleColor" red="0.87058823529999996" green="0.20784313730000001" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poppy Button" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvb-PP-RCR">
+                                <rect key="frame" x="222" y="245" width="156" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <color key="textColor" red="0.4362499118" green="0.48465189339999998" blue="0.63746446369999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="9Cg-in-lfS">
+                                <rect key="frame" x="238" y="460" width="124" height="120"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54F-wR-0P3">
+                                        <rect key="frame" x="0.0" y="0.0" width="124" height="30"/>
+                                        <state key="normal" title="Begin Selection"/>
+                                        <connections>
+                                            <action selector="beginSelectionButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CFj-T1-Frs"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f2R-nA-cTC">
+                                        <rect key="frame" x="0.0" y="45" width="124" height="30"/>
+                                        <state key="normal" title="End Selection"/>
+                                        <connections>
+                                            <action selector="endSelectionButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Vw-3q-jWN"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kex-i6-Yrb">
+                                        <rect key="frame" x="0.0" y="90" width="124" height="30"/>
+                                        <state key="normal" title="Highlight mid Pick"/>
+                                        <connections>
+                                            <action selector="highlightPickButtonTouchUpInside:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bbg-lD-kBI"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.88082021470000005" green="0.89981293679999996" blue="0.95445311070000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="SFV-fz-cim" firstAttribute="top" secondItem="uvb-PP-RCR" secondAttribute="bottom" constant="8" id="4dQ-PK-J6B"/>
+                            <constraint firstItem="SFV-fz-cim" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7Qr-pG-B7A"/>
+                            <constraint firstItem="9Cg-in-lfS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="F3Q-aa-Uc9"/>
+                            <constraint firstItem="uvb-PP-RCR" firstAttribute="centerX" secondItem="SFV-fz-cim" secondAttribute="centerX" id="GUc-dQ-0F9"/>
+                            <constraint firstItem="SFV-fz-cim" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="l83-Xk-XkX"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9Cg-in-lfS" secondAttribute="bottom" constant="20" id="uC6-5k-BGu"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="beginSelectionButton" destination="54F-wR-0P3" id="KLq-AF-EWq"/>
+                        <outlet property="endSelectionButton" destination="f2R-nA-cTC" id="ui4-3Z-Gfa"/>
+                        <outlet property="highlightPickButton" destination="Kex-i6-Yrb" id="yPE-2F-1os"/>
+                        <outlet property="poppyButton" destination="SFV-fz-cim" id="pX1-nV-ecn"/>
+                        <outlet property="poppyButtonLabel" destination="uvb-PP-RCR" id="d1L-K4-vOj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
