@@ -64,10 +64,10 @@ extension ViewController: PoppyDataSource {
     
     func pickViewForPoppyButton(button: PoppyButton, atIndex index: Int) -> UIView {
         let view = UIView(frame: CGRectMake(0, 0, button.pickDiameter, button.pickDiameter))
-        let square = UIView(frame: CGRectMake(button.pickDiameter/2 - button.pickDiameter/6, button.pickDiameter/2 - button.pickDiameter/6, button.pickDiameter/3, button.pickDiameter/3))
+        let square = UIView(frame: CGRectMake(button.pickDiameter/2 - button.pickDiameter/4, button.pickDiameter/2 - button.pickDiameter/4, button.pickDiameter/2, button.pickDiameter/2))
         
-        square.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        square.layer.cornerRadius = button.pickDiameter/6
+        square.backgroundColor = UIColor(hue: CGFloat(index)/5.0, saturation: 0.8, brightness: 0.6, alpha: 0.8)
+        square.layer.cornerRadius = button.pickDiameter/(2.0 + CGFloat(index))
         square.layer.masksToBounds = true
         square.autoresizingMask = [.FlexibleWidth, .FlexibleHeight, .FlexibleTopMargin, .FlexibleBottomMargin, .FlexibleLeftMargin, .FlexibleRightMargin]
 

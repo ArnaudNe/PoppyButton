@@ -17,18 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFV-fz-cim" customClass="PoppyButton" customModule="Poppy" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SFV-fz-cim" customClass="PoppyButton" customModule="Poppy" customModuleProvider="target">
                                 <rect key="frame" x="262" y="285" width="76" height="30"/>
                                 <state key="normal" title="Long Press">
                                     <color key="titleColor" red="0.87058823529999996" green="0.20784313730000001" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poppy Button" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvb-PP-RCR">
-                                <rect key="frame" x="222" y="245" width="156" height="32"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
-                                <color key="textColor" red="0.4362499118" green="0.48465189339999998" blue="0.63746446369999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="9Cg-in-lfS">
                                 <rect key="frame" x="238" y="460" width="124" height="120"/>
                                 <subviews>
@@ -55,13 +49,19 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poppy Button" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvb-PP-RCR">
+                                <rect key="frame" x="222" y="123" width="156" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <color key="textColor" red="0.4362499118" green="0.48465189339999998" blue="0.63746446369999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.88082021470000005" green="0.89981293679999996" blue="0.95445311070000005" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="SFV-fz-cim" firstAttribute="top" secondItem="uvb-PP-RCR" secondAttribute="bottom" constant="8" id="4dQ-PK-J6B"/>
                             <constraint firstItem="SFV-fz-cim" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7Qr-pG-B7A"/>
                             <constraint firstItem="9Cg-in-lfS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="F3Q-aa-Uc9"/>
                             <constraint firstItem="uvb-PP-RCR" firstAttribute="centerX" secondItem="SFV-fz-cim" secondAttribute="centerX" id="GUc-dQ-0F9"/>
+                            <constraint firstItem="SFV-fz-cim" firstAttribute="top" secondItem="uvb-PP-RCR" secondAttribute="bottom" constant="130" id="QCH-Ic-Cab"/>
                             <constraint firstItem="SFV-fz-cim" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="l83-Xk-XkX"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9Cg-in-lfS" secondAttribute="bottom" constant="20" id="uC6-5k-BGu"/>
                         </constraints>

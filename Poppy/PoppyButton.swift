@@ -64,6 +64,9 @@ public class PoppyButton: UIButton {
     private var selectedPick: PoppyPick? {
         didSet {
             guard selectedPick != oldValue else { return }
+            
+            oldValue?.unselect(animationDuration)
+            selectedPick?.select(animationDuration)
 
             guard let selectedPick = selectedPick, index = picks.indexOf(selectedPick) else {
                 print("UNSELECT")
@@ -209,7 +212,8 @@ public class PoppyButton: UIButton {
         
         for index in 0...picksCount-1 {
             let view = dataSource.pickViewForPoppyButton(self, atIndex: index)
-            let pick = PoppyPick(diameter: pickDiameter, title: dataSource.pickTitleForPoppyButton(self, atIndex: index))
+            let title = dataSource.pickTitleForPoppyButton(self, atIndex: index)
+            let pick = PoppyPick(diameter: pickDiameter, title: title)
             view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
             //            pick.icon.autoresizesSubviews = true
             pick.icon.addSubview(view)
@@ -257,18 +261,46 @@ public class PoppyButton: UIButton {
         
         // If selected pick exist, launch special animation for selected pick
         if let selectedPick = selectedPick, index = picks.indexOf(selectedPick) {
+            selectedPick.unselect(animationDuration)
+            
             delegate?.poppyButton(self, selectedPickAtIndex: index)
             
             selectedPick.transform = CGAffineTransformIdentity
             selectedPick.alpha = 1
             
+            
+            // old style: layer.renderInContext(UIGraphicsGetCurrentContext())
+            
+            
             let delay: Double = appearanceDuration * 2
-            UIView.animateWithDuration(appearanceDuration, delay: delay, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                selectedPick.alpha = 0
-                //                selectedPick.transform = CGAffineTransformMakeTranslation(0, CGRectGetWidth(selectedPick.frame))
-                //                selectedPick.transform = CGAffineTransformScale(selectedPick.transform, 1/3, 1/3)
-                selectedPick.frame = self.bounds
+            UIView.animateWithDuration(appearanceDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                self.imageView?.alpha = 0
+                self.titleLabel?.alpha = 0
             }) { (_) in
+            }
+            
+            UIView.animateWithDuration(appearanceDuration, delay: delay, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                //selectedPick.alpha = 0
+//                selectedPick.transform = CGAffineTransformMakeTranslation(0, CGRectGetWidth(selectedPick.frame))
+//                selectedPick.transform = CGAffineTransformScale(selectedPick.transform, 1/3, 1/3)
+//                let size = image.size
+                let size = CGSize(width: self.pickDiameter, height: self.pickDiameter)
+                
+                selectedPick.frame = CGRectMake(self.bounds.midX - size.width/2, self.bounds.midY - size.height/2, size.width, size.height)
+                self.animateCornerRadius(selectedPick.icon.layer, to: self.pickDiameter/2, duration: self.appearanceDuration, delay: delay, timing: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
+                
+            }) { (_) in
+                
+                UIGraphicsBeginImageContextWithOptions(selectedPick.bounds.size, false, UIScreen.mainScreen().scale)
+                selectedPick.drawViewHierarchyInRect(selectedPick.bounds, afterScreenUpdates: true)
+                
+                let image = UIGraphicsGetImageFromCurrentImageContext().imageWithRenderingMode(.AlwaysOriginal)
+                UIGraphicsEndImageContext()
+                self.setImage(image, forState: .Normal)
+                self.setTitle(nil, forState: .Normal)
+                self.titleLabel?.alpha = 1
+                self.imageView?.alpha = 1
+                
                 selectedPick.hidden = true
                 selectedPick.transform = CGAffineTransformIdentity
                 self.selectedPick = nil
@@ -328,16 +360,24 @@ public class PoppyButton: UIButton {
     // MARK: Private methods
     
     // MARK: Animations
-    private func animateCornerRadius(layer: CALayer, to: CGFloat, duration: Double, timing: CAMediaTimingFunction) {
+    private func animateCornerRadius(layer: CALayer, to: CGFloat, duration: Double, delay: Double, timing: CAMediaTimingFunction) {
         let animation = CABasicAnimation(keyPath: "cornerRadius")
         animation.timingFunction = timing
         animation.fromValue = NSNumber(float: Float(layer.cornerRadius))
         animation.toValue = NSNumber(float: Float(to))
         animation.removedOnCompletion = false
         animation.duration = duration
+        animation.fillMode = kCAFillModeBackwards
+        if (delay > 0) {
+            animation.beginTime = CACurrentMediaTime() + delay
+        }
         layer.addAnimation(animation, forKey: "cornerRadius")
         
         layer.cornerRadius = to
+    }
+    
+    private func animateCornerRadius(layer: CALayer, to: CGFloat, duration: Double, timing: CAMediaTimingFunction) {
+        animateCornerRadius(layer, to: to, duration: duration, delay: 0, timing: timing)
     }
     
     // MARK: Touches and gestures
@@ -459,24 +499,40 @@ public class PoppyButton: UIButton {
 
 private class PoppyPick: UIView {
     var label: UILabel?
+    var labelBackgroundView: UIView?
     var icon: UIView
     
+    var selected = false
+    let labelHeight: CGFloat = 15
     var title: String? {
         didSet {
             label?.text = title
             label?.adjustsFontSizeToFitWidth = true
-            label?.textColor = UIColor.blackColor()
+            label?.textColor = UIColor(white: 1, alpha: 0.95)
             label?.font = UIFont(name: "AvenirNext-Regular", size: 15.0)
         }
     }
     
-    private var labelSpacing: CGFloat = 10
+    private var labelSpacing: CGFloat = 5
+    private var labelWidth: CGFloat = 100
     
     override var frame: CGRect {
         didSet {
-            let labelFrame = CGRectMake(icon.frame.origin.x, icon.frame.origin.y, icon.frame.width, 20)
+            let labelFrame = CGRectMake(icon.bounds.midX - labelWidth/2, icon.frame.origin.y - labelHeight - labelSpacing, labelWidth, labelHeight)
             
-            label?.frame = labelFrame
+            label?.bounds = labelFrame
+            
+            if let label = label {
+                let labelTextHeight = label.intrinsicContentSize().height
+                let labelTextWidth = label.intrinsicContentSize().width + labelTextHeight/2
+
+                let labelBackgroundFrame = CGRectMake(label.bounds.midX - labelTextWidth/2, label.frame.origin.y, labelTextWidth, labelTextHeight)
+                
+                labelBackgroundView?.bounds = labelBackgroundFrame
+                labelBackgroundView?.center = label.center
+                labelBackgroundView?.layer.cornerRadius = labelBackgroundFrame.height/2
+            }
+            
             icon.frame = bounds
         }
     }
@@ -489,13 +545,19 @@ private class PoppyPick: UIView {
         
         let labelFrame = CGRectMake(icon.frame.origin.x, icon.frame.origin.y, icon.frame.width, 20)
         self.label = UILabel(frame: labelFrame)
+        labelBackgroundView = UIView(frame: labelFrame)
         
-        self.title = title
-        
-        self.addSubview(label!)
         self.addSubview(icon)
+        self.addSubview(labelBackgroundView!)
+        self.addSubview(label!)
         
         configureView()
+        
+        setTitle(title)
+    }
+    
+    func setTitle(title: String?) {
+        self.title = title
     }
     
     
@@ -506,9 +568,11 @@ private class PoppyPick: UIView {
         
         self.label = UILabel(frame: frame)
         self.icon = UIView(frame: frame)
+        labelBackgroundView = UIView(frame: frame)
         
-        self.addSubview(label!)
         self.addSubview(icon)
+        self.addSubview(labelBackgroundView!)
+        self.addSubview(label!)
         
         configureView()
     }
@@ -519,17 +583,22 @@ private class PoppyPick: UIView {
         super.init(coder: aDecoder)
         
         label = UILabel(coder: aDecoder)
+        labelBackgroundView = UIView(coder: aDecoder)!
         
-        self.addSubview(label!)
         self.addSubview(icon)
+        self.addSubview(labelBackgroundView!)
+        self.addSubview(label!)
         
         configureView()
     }
     
     private func configureView() -> Void {
-        let labelFrame = CGRectMake(icon.frame.origin.x, icon.frame.origin.y, icon.frame.width, 20)
+        let labelFrame = CGRectMake(icon.frame.origin.x, icon.frame.origin.y - labelHeight - labelSpacing, icon.frame.width, labelHeight)
         
         label?.frame = labelFrame
+        labelBackgroundView?.frame = labelFrame
+        labelBackgroundView?.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        label?.textAlignment = .Center
         icon.frame = bounds
         
         icon.layer.cornerRadius = CGRectGetWidth(icon.frame)/2
@@ -538,6 +607,77 @@ private class PoppyPick: UIView {
         self.clipsToBounds = false
         self.layer.masksToBounds = false
         
+        self.autoresizesSubviews = true
+        label?.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
+        label?.hidden = true
+        labelBackgroundView?.hidden = true
+        
         print(labelFrame)
+    }
+    
+    func select(animationDuration: Double) {
+        guard selected == false else { return }
+        selected = true
+        
+        guard let label = self.label, labelBackgroundView = labelBackgroundView else { return }
+        
+        print(label.frame)
+        
+//        let labelFrame = CGRectMake(icon.frame.origin.x, icon.frame.origin.y - labelHeight - labelSpacing, icon.frame.width, labelHeight)
+//        label.bounds = labelFrame
+        
+//        label.transform = CGAffineTransformMakeTranslation(0, CGRectGetHeight(label.frame))
+//        label.transform = CGAffineTransformMakeScale(1/3, 1/3)
+        
+        label.alpha = 0
+        label.hidden = false
+        labelBackgroundView.alpha = 0
+        labelBackgroundView.hidden = false
+        
+        label.layer.removeAllAnimations()
+        labelBackgroundView.layer.removeAllAnimations()
+
+        UIView.animateWithDuration(animationDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            
+            label.alpha = 1
+            label.hidden = false
+            label.transform = CGAffineTransformIdentity
+            labelBackgroundView.alpha = 1
+            labelBackgroundView.hidden = false
+            labelBackgroundView.transform = CGAffineTransformIdentity
+        }) { (_) in
+            label.hidden = false
+            labelBackgroundView.hidden = false
+        }
+    }
+    
+    func unselect(animationDuration: Double) {
+        guard selected == true else { return }
+        selected = false
+        
+        guard let label = self.label, labelBackgroundView = labelBackgroundView else { return }
+        
+        print(label.frame)
+        
+        label.alpha = 1
+        label.hidden = false
+        labelBackgroundView.alpha = 1
+        labelBackgroundView.hidden = false
+        
+        label.layer.removeAllAnimations()
+
+        UIView.animateWithDuration(animationDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+//            label.transform = CGAffineTransformMakeTranslation(0, CGRectGetHeight(label.frame))
+//            label.transform = CGAffineTransformMakeScale(1/3, 1/3)
+
+            label.alpha = 0
+            labelBackgroundView.alpha = 0
+        }) { (_) in
+            label.hidden = true
+            labelBackgroundView.hidden = false
+            
+            label.transform = CGAffineTransformIdentity
+            labelBackgroundView.transform = CGAffineTransformIdentity
+        }
     }
 }
